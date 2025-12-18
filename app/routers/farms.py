@@ -15,7 +15,19 @@ router = APIRouter(
     tags=["[🚜] Fazendas"]
 )
 
-@router.get("/{id}", response_model=farmSchemas.FarmResponse)
+@router.get(
+    "/{id}", 
+    response_model=farmSchemas.FarmResponse, 
+    summary="Obter informações de uma fazenda específica.",
+    description=(
+        "Retorna as informações detalhadas de uma fazenda cadastrada na base de dados de São Paulo, a busca é realizada pelo código único do ímovel."
+        "Os dados retornados incluem a área da propriedade em hectares, assim como o módulo fiscal e o status de regularidade ambiental."
+    ),
+    responses={
+        200: {"description": "Dados da fazenda retornados com sucesso."},
+        404: {"description": "O código do imóvel informado não foi encontrado na base de dados."}
+    }
+)
 def get_farm(id: str, db: Session = Depends(get_db)):
     farm = db.query(Farm).where(Farm.cod_imovel == id).first()
 
@@ -37,7 +49,17 @@ def get_farm(id: str, db: Session = Depends(get_db)):
         "data_atualizacao": farm.dat_atuali
     }
 
-@router.post("/busca-ponto", response_model=farmSchemas.FarmSearchResponse)
+@router.post(
+    "/busca-ponto", 
+    response_model=farmSchemas.FarmSearchResponse,     
+    summary="Obter informações de fazendas a partir das coordenadas",
+    description=(
+        "Retorna as informações detalhadas de fazendas cadastradas na base de dados de São Paulo que estejam nos limites da coordenada informada."
+        "Os dados retornados incluem a área da propriedade em hectares, assim como o módulo fiscal e o status de regularidade ambiental."
+    ),
+    responses={
+        200: {"description": "Dados das fazendas retornados com sucesso."},
+    })
 def get_farm_by_coordinate(
     coord: Coordinate,
     page: int = Query(1, ge=1, description='Página a ser retornada'),
@@ -73,7 +95,17 @@ def get_farm_by_coordinate(
 
     return pagination(data, totalFarms, page, pageSize)
 
-@router.post("/busca-raio", response_model=farmSchemas.FarmSearchResponse)
+@router.post(
+    "/busca-raio", 
+    response_model=farmSchemas.FarmSearchResponse,
+        summary="Obter informações de fazendas que estejam dentro dos limites de raio das coordenadas informadas",
+    description=(
+        "Retorna as informações detalhadas de fazendas cadastradas na base de dados de São Paulo que estejam nos limites de raio das coordenadas informadas."
+        "Os dados retornados incluem a área da propriedade em hectares, assim como o módulo fiscal e o status de regularidade ambiental."
+    ),
+    responses={
+        200: {"description": "Dados das fazendas retornados com sucesso."},
+    })
 def get_farm_by_radius(
     coord: CoordinateAndRadius,
     page: int = Query(1, ge=1, description='Página a ser retornada'),
