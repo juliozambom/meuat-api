@@ -24,7 +24,7 @@ O projeto conta com um sistema de **População Automática (Seed)**: ao iniciar
 
 1. **Clone o repositório:**
    ```bash
-   git clone [https://github.com/juliozambom/meuat-api.git](https://github.com/juliozambom/meuat-api.git)
+   git clone https://github.com/juliozambom/meuat-api
    cd meuat-api
 
    
