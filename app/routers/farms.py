@@ -21,7 +21,7 @@ router = APIRouter(
     summary="Obter informações de uma fazenda específica.",
     description=(
         "Retorna as informações detalhadas de uma fazenda cadastrada na base de dados de São Paulo, a busca é realizada pelo código único do ímovel. "
-        "Os dados retornados incluem a área da propriedade em hectares, assim como o módulo fiscal e o status de regularidade ambiental."
+        "Os dados retornados incluem informações gerais sobre o ímovel, assim como a área da propriedade em hectares, o módulo fiscal e o status de regularidade ambiental."
     ),
     responses={
         200: {"description": "Dados da fazenda retornados com sucesso."},
@@ -55,7 +55,7 @@ def get_farm(id: str, db: Session = Depends(get_db)):
     summary="Obter informações de fazendas a partir das coordenadas",
     description=(
         "Retorna as informações detalhadas de fazendas cadastradas na base de dados de São Paulo que estejam nos limites da coordenada informada. "
-        "Os dados retornados incluem a área da propriedade em hectares, assim como o módulo fiscal e o status de regularidade ambiental."
+        "Os dados retornados incluem informações gerais sobre o ímovel, assim como a área da propriedade em hectares, o módulo fiscal e o status de regularidade ambiental."
     ),
     responses={
         200: {"description": "Dados das fazendas retornados com sucesso."},
@@ -101,7 +101,7 @@ def get_farm_by_coordinate(
         summary="Obter informações de fazendas que estejam dentro dos limites de raio das coordenadas informadas",
     description=(
         "Retorna as informações detalhadas de fazendas cadastradas na base de dados de São Paulo que estejam nos limites de raio das coordenadas informadas. "
-        "Os dados retornados incluem a área da propriedade em hectares, assim como o módulo fiscal e o status de regularidade ambiental."
+        "Os dados retornados incluem informações gerais sobre o ímovel, assim como a área da propriedade em hectares, o módulo fiscal e o status de regularidade ambiental."
     ),
     responses={
         200: {"description": "Dados das fazendas retornados com sucesso."},
