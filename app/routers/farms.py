@@ -20,7 +20,7 @@ router = APIRouter(
     response_model=farmSchemas.FarmResponse, 
     summary="Obter informações de uma fazenda específica.",
     description=(
-        "Retorna as informações detalhadas de uma fazenda cadastrada na base de dados de São Paulo, a busca é realizada pelo código único do ímovel."
+        "Retorna as informações detalhadas de uma fazenda cadastrada na base de dados de São Paulo, a busca é realizada pelo código único do ímovel. "
         "Os dados retornados incluem a área da propriedade em hectares, assim como o módulo fiscal e o status de regularidade ambiental."
     ),
     responses={
@@ -54,7 +54,7 @@ def get_farm(id: str, db: Session = Depends(get_db)):
     response_model=farmSchemas.FarmSearchResponse,     
     summary="Obter informações de fazendas a partir das coordenadas",
     description=(
-        "Retorna as informações detalhadas de fazendas cadastradas na base de dados de São Paulo que estejam nos limites da coordenada informada."
+        "Retorna as informações detalhadas de fazendas cadastradas na base de dados de São Paulo que estejam nos limites da coordenada informada. "
         "Os dados retornados incluem a área da propriedade em hectares, assim como o módulo fiscal e o status de regularidade ambiental."
     ),
     responses={
@@ -100,7 +100,7 @@ def get_farm_by_coordinate(
     response_model=farmSchemas.FarmSearchResponse,
         summary="Obter informações de fazendas que estejam dentro dos limites de raio das coordenadas informadas",
     description=(
-        "Retorna as informações detalhadas de fazendas cadastradas na base de dados de São Paulo que estejam nos limites de raio das coordenadas informadas."
+        "Retorna as informações detalhadas de fazendas cadastradas na base de dados de São Paulo que estejam nos limites de raio das coordenadas informadas. "
         "Os dados retornados incluem a área da propriedade em hectares, assim como o módulo fiscal e o status de regularidade ambiental."
     ),
     responses={
