@@ -4,7 +4,10 @@ from fastapi import FastAPI
 
 from pydantic import BaseModel
 
-app = FastAPI()
+app = FastAPI(
+    title="MeuAT REST API",
+    description="API construída para o MeuAT, um CRM agrícola que trabalha com dados geoespaciais de fazendas, sua funcionalidade principal é a busca de fazendas por localização, seja por ponto exato ou por proximidade."
+)
 
 @app.get("/fazendas/{id}")
 def get_farm(id: int, q: Union[str, None] = None):
