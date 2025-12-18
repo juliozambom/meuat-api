@@ -16,6 +16,7 @@ app.include_router(farms.router)
 @app.get(
     "/health", 
     tags=["[🫁] HealthCheck"],
+    summary="Obter informações básicas quanto à saúde atual da aplicação",
     description="Realiza um diagnóstico básico na aplicação, validando a conexão com o banco de dados e a disponibilidade de serviços base essenciais para o bom funcionamento da aplicação.",
     response_model=HealthCheckResponse, 
     response_description="Retorna o status atual da API e do banco de dados."
