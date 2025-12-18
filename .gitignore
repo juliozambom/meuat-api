@@ -1,0 +1,21 @@
+# --- Environment / Secrets ---
+.env
+*.env
+.venv/
+env/
+venv/
+ENV/
+
+# --- Python ---
+__pycache__/
+
+# --- VS Code ---
+.vscode/
+*.code-workspace
+.history/
+
+# --- Testing / Coverage ---
+.target/
+.pytest_cache/
+.coverage
+htmlcov/
