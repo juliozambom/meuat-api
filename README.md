@@ -7,7 +7,7 @@ O projeto conta com um sistema de **População Automática (Seed)**: ao iniciar
 ## 🚀 Tecnologias Utilizadas
 
 * **Python 3.14+**
-* **FastAPI** (Framework Web)
+* **FastAPI**
 * **PostgreSQL 16 + PostGIS 3.4**
 * **GeoPandas & Pyogrio**
 * **Docker & Docker Compose**
