@@ -63,7 +63,7 @@ def get_farm(id: str, db: Session = Depends(get_db)):
 def get_farm_by_coordinate(
     coord: Coordinate,
     page: int = Query(1, ge=1, description='Página a ser retornada'),
-    pageSize: int = Query(1, ge=1, le=100, description='Número máximo de registros na página'),
+    pageSize: int = Query(10, ge=1, le=100, description='Número máximo de registros na página'),
     db: Session = Depends(get_db)
 ):
     point = f"POINT({coord.longitude} {coord.latitude})"
@@ -109,7 +109,7 @@ def get_farm_by_coordinate(
 def get_farm_by_radius(
     coord: CoordinateAndRadius,
     page: int = Query(1, ge=1, description='Página a ser retornada'),
-    pageSize: int = Query(1, ge=1, le=100, description='Número máximo de registros na página'),
+    pageSize: int = Query(10, ge=1, le=100, description='Número máximo de registros na página'),
     db: Session = Depends(get_db)
 ):
     point = f"POINT({coord.longitude} {coord.latitude})"
