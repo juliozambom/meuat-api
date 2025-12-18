@@ -2,7 +2,8 @@ import math
 from fastapi import FastAPI, Depends, HTTPException, Query
 
 from sqlalchemy.orm import Session
-from sqlalchemy import func
+from sqlalchemy import func, cast
+from geoalchemy2 import Geography
 
 from pydantic import BaseModel
 
@@ -33,7 +34,7 @@ def get_farm(id: str, db: Session = Depends(get_db)):
         "municipio": farm.municipio,
         "codigo_estado": farm.cod_estado,
         "data_criacao": farm.dat_criaca,
-        "data_atualicao": farm.dat_atuali
+        "data_atualizacao": farm.dat_atuali
     }
 
 class Coordinate(BaseModel):
@@ -72,9 +73,17 @@ def get_farm_by_coordinate(
     data  = [
         {
             "id": f.cod_imovel,
-            "nome": f.nom_tema,
+            "codigo_tema": f.cod_tema,
+            "nome_tema": f.nom_tema,
+            "modulo_fiscal": f.mod_fiscal,
+            "area": f.num_area,
+            "status": f.ind_status,
+            "tipo": f.ind_tipo,
+            "descricao_condicao": f.des_condic,
             "municipio": f.municipio,
-            "area": f.num_area
+            "codigo_estado": f.cod_estado,
+            "data_criacao": f.dat_criaca,
+            "data_atualizacao": f.dat_atuali
         } for f in farms
     ]
 
@@ -84,8 +93,57 @@ def get_farm_by_coordinate(
     }
 
 class CoordinateAndRadius(Coordinate):
-    radius: int
+    raio_km: int
 
 @app.post("/fazendas/busca-raio")
-def get_farm_by_radius(coord: CoordinateAndRadius):
-    return {"id": 123, "coord": coord} 
+def get_farm_by_radius(
+    coord: CoordinateAndRadius,
+    page: int = Query(1, ge=1, description='Página a ser retornada'),
+    pageSize: int = Query(1, ge=1, le=100, description='Número máximo de registros na página'),
+    db: Session = Depends(get_db)
+):
+    point = f"POINT({coord.longitude} {coord.latitude})"
+
+    radiusInMeters = coord.raio_km * 1000;
+
+    query = db.query(Farm).where(
+        func.ST_DWithin(
+            cast(Farm.geometry, Geography), 
+            cast(func.ST_GeomFromText(point, 4326), Geography),
+            radiusInMeters
+        )
+    )
+
+    farms = query.offset((page - 1) * pageSize).limit(pageSize).all()
+    
+    totalFarms = query.count()
+    
+    metadata = {
+       "page": page,
+       "pageSize": pageSize,
+       "records": len(farms),
+       "totalPages": math.ceil(totalFarms / pageSize), 
+       "totalRecords": totalFarms
+    }
+
+    data  = [
+        {
+            "id": f.cod_imovel,
+            "codigo_tema": f.cod_tema,
+            "nome_tema": f.nom_tema,
+            "modulo_fiscal": f.mod_fiscal,
+            "area": f.num_area,
+            "status": f.ind_status,
+            "tipo": f.ind_tipo,
+            "descricao_condicao": f.des_condic,
+            "municipio": f.municipio,
+            "codigo_estado": f.cod_estado,
+            "data_criacao": f.dat_criaca,
+            "data_atualizacao": f.dat_atuali
+        } for f in farms
+    ]
+
+    return {
+        "metadata": metadata,
+        "data": data
+    }
