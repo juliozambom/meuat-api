@@ -9,14 +9,15 @@ from fastapi import Depends, HTTPException, Query, APIRouter
 from app.database import get_db
 from app.models import Farm
 
-from app.schemas import Coordinate, CoordinateAndRadius
+from app.schemas.common import Coordinate, CoordinateAndRadius
+from app.schemas import farms as farmSchemas
 
 router = APIRouter(
     prefix="/fazendas",
     tags=["farms"]
 )
 
-@router.get("/{id}")
+@router.get("/{id}", response_model=farmSchemas.FarmResponse)
 def get_farm(id: str, db: Session = Depends(get_db)):
     farm = db.query(Farm).where(Farm.cod_imovel == id).first()
 
@@ -38,7 +39,7 @@ def get_farm(id: str, db: Session = Depends(get_db)):
         "data_atualizacao": farm.dat_atuali
     }
 
-@router.post("/busca-ponto")
+@router.post("/busca-ponto", response_model=farmSchemas.FarmSearchResponse)
 def get_farm_by_coordinate(
     coord: Coordinate,
     page: int = Query(1, ge=1, description='Página a ser retornada'),
@@ -85,7 +86,7 @@ def get_farm_by_coordinate(
         "data": data
     }
 
-@router.post("/busca-raio")
+@router.post("/busca-raio", response_model=farmSchemas.FarmSearchResponse)
 def get_farm_by_radius(
     coord: CoordinateAndRadius,
     page: int = Query(1, ge=1, description='Página a ser retornada'),
