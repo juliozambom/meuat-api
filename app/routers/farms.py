@@ -12,7 +12,7 @@ from app.models import Farm
 from app.schemas import Coordinate, CoordinateAndRadius
 
 router = APIRouter(
-    prefix="fazendas",
+    prefix="/fazendas",
     tags=["farms"]
 )
 
