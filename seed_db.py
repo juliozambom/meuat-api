@@ -1,4 +1,6 @@
 import os
+import zipfile
+import gdown
 import geopandas as gpd
 from app.database import engine
 from sqlalchemy import inspect
@@ -8,14 +10,27 @@ def seed_db():
     if inspect(engine).has_table("farms"):
         print("Database is already populated, skiping seed script...")
         return
+    
+    file_id = "15ghpnwzdDhFqelouqvQwXlbzovtPhlFe"
+    data_dir = "data"
+    zip_path = os.path.join(data_dir, "areaimovel.zip")
+    os.makedirs(data_dir, exist_ok=True)
 
-    shapefile_path = "data/AREA_IMOVEL_1.shp"
+    if not os.path.exists(zip_path):
+        print("Iniciando download dos dados dos polígonos das fazendas do estado de São Paulo.")
+        url = f'https://drive.google.com/uc?id={file_id}'
+        gdown.download(url, zip_path, quiet=False)
 
-    print("Looking if Shapefile exists...")
-
-    if not os.path.exists(shapefile_path):
-        print(f"Error: {shapefile_path} not found!")
+    print("Extraindo arquivos...")
+    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        zip_ref.extractall(data_dir)
+    
+    shp_files = [f for f in os.listdir(data_dir) if f.endswith('.shp')]
+    if not shp_files:
+        print("Erro: Nenhum .shp encontrado.")
         return
+    
+    shapefile_path = os.path.join(data_dir, shp_files[0])
     
     chunk_size = 10000
 
