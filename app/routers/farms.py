@@ -1,16 +1,16 @@
 import math
 
+from fastapi import Depends, HTTPException, Query, APIRouter
+
 from sqlalchemy.orm import Session
 from sqlalchemy import func, cast
 from geoalchemy2 import Geography
 
-from fastapi import Depends, HTTPException, Query, APIRouter
-
 from app.database import get_db
 from app.models import Farm
-
 from app.schemas.common import Coordinate, CoordinateAndRadius
 from app.schemas import farms as farmSchemas
+from app.utils.response import pagination
 
 router = APIRouter(
     prefix="/fazendas",
@@ -55,14 +55,6 @@ def get_farm_by_coordinate(
     farms = query.offset((page - 1) * pageSize).limit(pageSize).all()
     
     totalFarms = query.count()
-    
-    metadata = {
-       "page": page,
-       "pageSize": pageSize,
-       "records": len(farms),
-       "totalPages": math.ceil(totalFarms / pageSize), 
-       "totalRecords": totalFarms
-    }
 
     data  = [
         {
@@ -81,10 +73,7 @@ def get_farm_by_coordinate(
         } for f in farms
     ]
 
-    return {
-        "metadata": metadata,
-        "data": data
-    }
+    return pagination(data, totalFarms, page, pageSize)
 
 @router.post("/busca-raio", response_model=farmSchemas.FarmSearchResponse)
 def get_farm_by_radius(
@@ -109,14 +98,6 @@ def get_farm_by_radius(
     
     totalFarms = query.count()
     
-    metadata = {
-       "page": page,
-       "pageSize": pageSize,
-       "records": len(farms),
-       "totalPages": math.ceil(totalFarms / pageSize), 
-       "totalRecords": totalFarms
-    }
-
     data  = [
         {
             "id": f.cod_imovel,
@@ -134,7 +115,4 @@ def get_farm_by_radius(
         } for f in farms
     ]
 
-    return {
-        "metadata": metadata,
-        "data": data
-    }
+    return pagination(data, totalFarms, page, pageSize)
