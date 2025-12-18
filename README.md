@@ -39,7 +39,7 @@ O projeto conta com um sistema de **População Automática (Seed)**: ao iniciar
 
 Inicie os containers:
   ```bash
-  docker-compose up --build
+  docker-compose up -d
   ```
 
 Após finalizar a orquestração e inicialicação dos containers, a API já estára disponivel para acesso em http://localhost:8000
