@@ -4,10 +4,10 @@ from geoalchemy2 import Geometry
 
 class Farm(Base):
     __tablename__ = "farms"
-    
+
+    cod_imovel = Column(String, index=True, primary_key=True)
     cod_tema = Column(String)
     nom_tema = Column(String)
-    cod_imovel = Column(String, index=True)
     mod_fiscal = Column(Float)
     num_area = Column(Float)
     ind_status = Column(String)
