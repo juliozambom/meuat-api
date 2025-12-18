@@ -42,7 +42,7 @@ Inicie os containers:
   docker-compose up -d
   ```
 
-Após finalizar a orquestração e inicialicação dos containers, a API já estára disponivel para acesso em http://localhost:8000
+Após finalizar a orquestração e inicialicação dos containers, a API já estará disponivel para acesso em http://localhost:8000
 
 📖 Documentação da API (Swagger) 
 
