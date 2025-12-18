@@ -63,7 +63,8 @@ def get_farm_by_coordinate(
     
     metadata = {
        "page": page,
-       "pageSize": len(farms),
+       "pageSize": pageSize,
+       "records": len(farms),
        "totalPages": math.ceil(totalFarms / pageSize), 
        "totalRecords": totalFarms
     }
