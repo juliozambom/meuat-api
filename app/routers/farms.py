@@ -5,7 +5,7 @@ from sqlalchemy import func, cast
 from geoalchemy2 import Geography
 
 from app.database import get_db
-from app.models import Farm
+from app.models.farm import Farm
 from app.schemas.common import Coordinate, CoordinateAndRadius
 from app.schemas import farms as farmSchemas
 from app.utils.response import pagination
