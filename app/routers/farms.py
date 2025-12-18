@@ -12,7 +12,7 @@ from app.utils.response import pagination
 
 router = APIRouter(
     prefix="/fazendas",
-    tags=["farms"]
+    tags=["[🚜] Fazendas"]
 )
 
 @router.get("/{id}", response_model=farmSchemas.FarmResponse)

@@ -6,3 +6,8 @@ class Coordinate(BaseModel):
 
 class CoordinateAndRadius(Coordinate):
     raio_km: int
+
+class HealthCheckResponse(BaseModel):
+    status: str
+    db: str
+    message: str
