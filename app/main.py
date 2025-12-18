@@ -1,8 +1,12 @@
 from typing import Union
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
+
+from sqlalchemy.orm import Session
 
 from pydantic import BaseModel
+
+from app.database import get_db
 
 app = FastAPI(
     title="MeuAT REST API",
@@ -18,7 +22,7 @@ class Coordinate(BaseModel):
     longitude: float
 
 @app.post("/fazendas/busca-ponto")
-def get_farm_by_coordinate(coord: Coordinate):
+def get_farm_by_coordinate(coord: Coordinate, db: Session = Depends(get_db)):
     return {"id": 123, "coord": coord}
 
 class CoordinateAndRadius(Coordinate):
@@ -26,4 +30,4 @@ class CoordinateAndRadius(Coordinate):
 
 @app.post("/fazendas/busca-raio")
 def get_farm_by_radius(coord: CoordinateAndRadius):
-    return {"id": 123, "coord": coord}
+    return {"id": 123, "coord": coord} 
