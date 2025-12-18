@@ -1,5 +1,3 @@
-import math
-
 from fastapi import Depends, HTTPException, Query, APIRouter
 
 from sqlalchemy.orm import Session
