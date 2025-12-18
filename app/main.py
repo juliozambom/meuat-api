@@ -1,5 +1,3 @@
-from typing import Union
-
 from fastapi import FastAPI, Depends, HTTPException
 
 from sqlalchemy.orm import Session
@@ -23,17 +21,17 @@ def get_farm(id: str, db: Session = Depends(get_db)):
 
     return {
         "id": farm.cod_imovel,
-        "cod_tema": farm.cod_tema,
-        "nom_tema": farm.nom_tema,
-        "mod_fiscal": farm.mod_fiscal,
-        "num_area": farm.num_area,
-        "ind_status": farm.ind_status,
-        "ind_tipo": farm.ind_tipo,
-        "des_condic": farm.des_condic,
+        "codigo_tema": farm.cod_tema,
+        "nome_tema": farm.nom_tema,
+        "modulo_fiscal": farm.mod_fiscal,
+        "numero_area": farm.num_area,
+        "status": farm.ind_status,
+        "tipo": farm.ind_tipo,
+        "descricao_condicao": farm.des_condic,
         "municipio": farm.municipio,
-        "cod_estado": farm.cod_estado,
-        "dat_criaca": farm.dat_criaca,
-        "dat_atuali": farm.dat_atuali
+        "codigo_estado": farm.cod_estado,
+        "data_criacao": farm.dat_criaca,
+        "data_atualicao": farm.dat_atuali
     }
 
 class Coordinate(BaseModel):
