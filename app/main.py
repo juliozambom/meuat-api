@@ -1,6 +1,8 @@
-from fastapi import FastAPI, Depends, HTTPException
+import math
+from fastapi import FastAPI, Depends, HTTPException, Query
 
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 
 from pydantic import BaseModel
 
@@ -24,7 +26,7 @@ def get_farm(id: str, db: Session = Depends(get_db)):
         "codigo_tema": farm.cod_tema,
         "nome_tema": farm.nom_tema,
         "modulo_fiscal": farm.mod_fiscal,
-        "numero_area": farm.num_area,
+        "area": farm.num_area,
         "status": farm.ind_status,
         "tipo": farm.ind_tipo,
         "descricao_condicao": farm.des_condic,
@@ -38,9 +40,47 @@ class Coordinate(BaseModel):
     latitude: float
     longitude: float
 
+class PaginationQuery(BaseModel):
+    page: int
+    limit: int
+
 @app.post("/fazendas/busca-ponto")
-def get_farm_by_coordinate(coord: Coordinate, db: Session = Depends(get_db)):
-    return {"id": 123, "coord": coord}
+def get_farm_by_coordinate(
+    coord: Coordinate,
+    page: int = Query(1, ge=1, description='Página a ser retornada'),
+    pageSize: int = Query(1, ge=1, le=100, description='Número máximo de registros na página'),
+    db: Session = Depends(get_db)
+):
+    point = f"POINT({coord.longitude} {coord.latitude})"
+
+    query = db.query(Farm).where(
+        func.ST_Contains(Farm.geometry, func.ST_GeomFromText(point, 4326))
+    )
+
+    farms = query.offset((page - 1) * pageSize).limit(pageSize).all()
+    
+    totalFarms = query.count()
+    
+    metadata = {
+       "page": page,
+       "pageSize": len(farms),
+       "totalPages": math.ceil(totalFarms / pageSize), 
+       "totalRecords": totalFarms
+    }
+
+    data  = [
+        {
+            "id": f.cod_imovel,
+            "nome": f.nom_tema,
+            "municipio": f.municipio,
+            "area": f.num_area
+        } for f in farms
+    ]
+
+    return {
+        "metadata": metadata,
+        "data": data
+    }
 
 class CoordinateAndRadius(Coordinate):
     radius: int
